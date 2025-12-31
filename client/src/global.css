@@ -1,0 +1,74 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Root Styling */
+:root {
+    --font-neuro: "Inter", sans-serif;
+    --color-highlight: #129fe5;
+    --color-error: rgb(243, 9, 9)
+}
+
+#root {
+    @apply m-auto w-full h-full;
+    font-family: var(--font-neuro);
+}
+
+/* Home Page Styling */
+.home{
+    @apply h-screen flex flex-col w-full items-center p-3;
+}
+
+.h1 {
+    @apply h-10 text-2xl mt-5 mb-5 font-semibold p-2 text-center underline;
+}
+
+.p {
+    @apply text-left max-w-[80vw] mb-2;
+}
+
+.form {
+    @apply flex flex-col justify-start mt-5 items-start max-w-[80vw];
+}
+
+.formInput {
+    @apply m-3 mb-5 p-1 rounded-md w-[40vw];
+    outline: 2px solid var(--color-highlight);
+    color: var(--color-highlight);
+}
+
+.formInput:focus {
+    @apply shadow-lg;
+    color: var(--color-highlight);
+}
+
+.formCheckbox{
+    @apply m-2 p-1 rounded-md w-[60vw] items-center;
+}
+
+.submitButton{
+    @apply flex self-end m-3 p-2 rounded-md border-2 w-[40px] items-center justify-center min-w-max;
+    background-color: var(--color-highlight);
+    border-color: var(--color-highlight);
+    color: var(--color-gray);
+}
+
+.submitButton:hover {
+    @apply shadow-sm drop-shadow-md;
+    border-color: var(--color-highlight);
+    color: white;
+}
+
+.a {
+    @apply: inline-block;
+}   
+
+.a:hover{
+    @apply underline drop-shadow-sm;
+    color: var(--color-highlight);
+}
+
+.error{
+    @apply text-sm drop-shadow-sm;
+    color: var(--color-error)
+}
