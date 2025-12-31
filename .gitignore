@@ -3,3 +3,4 @@ node_modules/
 
 # Other
 .DS_Store
+\ipynb_checkpoints/
