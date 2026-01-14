@@ -52,6 +52,8 @@ train_df['MonthlyIncome_imputed'] = train_df['MonthlyIncome_imputed'].clip(lower
 # Number Of Open Credit Lines And Loans
 train_df['NumberOfOpenCreditLinesAndLoans'] = train_df['NumberOfOpenCreditLinesAndLoans'].clip(lower=0, upper=40)
 
+# Drops one row with NaN in age_bin_mid
+train_df = train_df.dropna(subset=['age_bin_mid'])
 
 def train_model():
     FEATURES = [
@@ -74,7 +76,8 @@ def train_model():
         C=1e2, 
         max_iter=2000,
         solver='lbfgs'
-        )
+    )
+
     # fit the model
     lr_model.fit(X_model, Y_model)
 
