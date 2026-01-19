@@ -1,15 +1,17 @@
 import express from 'express';
 import { ApolloServer } from '@apollo/server';
 import { expressMiddleware } from '@apollo/server/express4';
-import path from 'path';
 import { typeDefs, resolvers } from './schemas/index.js';
-import { fileURLToPath } from 'url'; 
+import dotenv from 'dotenv';
+// import path from 'path';
+// import { fileURLToPath } from 'url'; 
 
-const __filename = fileURLToPath(import.meta.url); 
-const __dirname = path.dirname(__filename); 
+// const __filename = fileURLToPath(import.meta.url); 
+// const __dirname = path.dirname(__filename); 
+
+dotenv.config();
 
 const PORT = process.env.PORT || 3001;
-
 const app = express();
 
 const server = new ApolloServer({
@@ -27,14 +29,6 @@ const startServer = async () => {
     '/graphql', 
     expressMiddleware(server)
   );  
-
-  if (process.env.NODE_ENV === 'production') {
-    app.use(express.static(path.join(__dirname, '../../client/dist')));
-
-    app.get('*', (_req, res) => {
-      res.sendFile(path.join(__dirname, '../../client/dist/index.html'));
-    });
-  }
 
   app.listen(PORT, () => {
     console.log(`API server running on port ${PORT}!`);

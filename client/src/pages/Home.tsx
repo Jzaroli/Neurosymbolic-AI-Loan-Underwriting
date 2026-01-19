@@ -62,7 +62,7 @@ const Home = () => {
         const creditScoreNum = Number(profileFormData.creditScore);
         const monthlyDebtsNum = Number(profileFormData.monthlyDebts);
         const monthlyIncomeNum = Number(profileFormData.monthlyIncome);
-        const debtRatio = (monthlyDebtsNum / monthlyIncomeNum) * 100;
+        // const debtRatio = (monthlyDebtsNum / monthlyIncomeNum) * 100;
         const delinquencies30Num = Number(profileFormData.delinquencies30);
         const delinquencies60Num = Number(profileFormData.delinquencies60);
         const delinquencies90Num = Number(profileFormData.delinquencies90);
@@ -81,10 +81,12 @@ const Home = () => {
         } else if (creditScoreNum < 300 || creditScoreNum > 850) {
             setIntialError(true);
             setInitialErrorMessage('Applicant credit score must be between 300 and 850.');
-        } else if (debtRatio > 43.00) {
-            setIntialError(true);
-            setInitialErrorMessage(`Applicant debt to income must be under 43%. Current Percentage: ${debtRatio.toFixed(2)}%`);
-        } else if (!profileFormData.hasIncomeVerification) {
+        } 
+        // else if (debtRatio > 43.00) {
+        //     setIntialError(true);
+        //     setInitialErrorMessage(`Applicant debt to income must be under 43%. Current Percentage: ${debtRatio.toFixed(2)}%`);
+        // } 
+        else if (!profileFormData.hasIncomeVerification) {
             setIntialError(true);
             setInitialErrorMessage('Applicant must be able to provide proof of income.');
         } else if (profileFormData.hasBankruptcy) {
@@ -124,7 +126,7 @@ const Home = () => {
             <div className='home'>
                 <h1 className='h1'>Neurosymbolic AI System for Loan Underwriting</h1>
                 <div className='m-4 justify-start'>
-                    <p className='p'> <b>About: </b>Accurately vetting a loan candidate is a complex and risky process. Many factors play into approving a loan, opening the chance for errors in judgement with future defaulters. A hybrid AI model is the perfect architecture for mitigating loan default risks and providing much needed clarity to both parties. A machine learning model predicts the probability of default for an applicant. An added ontology and rule based layer approves or denies the applicant. A RAG pipeline adds domain intelligence. The final output is processed by an LLM, returning a concise summary of the candidate’s risk profile and application. This app combines all of these layers in an easy to use web application.</p>
+                    <p className='p'> <b>About: </b>Accurately vetting a loan candidate is a complex and risky process. Many factors play into approving a loan, opening the chance for errors in judgement with future defaulters. A hybrid AI model is the perfect architecture for mitigating loan default risks and providing much needed clarity to both parties. A machine learning model predicts the risk of default for an applicant. An added ontology and rule based layer approves or denies the applicant. A RAG pipeline adds domain intelligence. The final output is processed by an LLM, returning a concise summary of the candidate’s risk profile and application. This app combines all of these layers into an easy to use web application.</p>
                     <p className='p'> <b>Note: </b>This app is for demo purposes. No personal information, documents or otherwise are requested and no information is stored.</p>
                     <p className='max-w-full border-b-2 min-h-[20px]'></p>
                     <h2 className='font-bold underline mt-10 text-lg'>Applicant Form:</h2>

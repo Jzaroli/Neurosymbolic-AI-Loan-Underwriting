@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from ml.api.routes import prediction
+from ml_service.api.routes import prediction
 
 api = APIRouter()
 
