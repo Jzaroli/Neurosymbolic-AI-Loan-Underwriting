@@ -16,7 +16,8 @@ input InferenceInput {
 }
 
 type InferenceResponse {
-  placeholder: Int!
+  score: Int!
+  probability: Float!
 }
 
 type Query {
