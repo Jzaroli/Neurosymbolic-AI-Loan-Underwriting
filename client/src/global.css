@@ -20,7 +20,7 @@
 }
 
 .h1 {
-    @apply h-10 text-2xl mt-5 mb-5 font-semibold p-2 text-center underline;
+    @apply h-10 text-2xl mt-5 mb-7 font-semibold p-2 text-center underline;
 }
 
 .p {
@@ -32,7 +32,7 @@
 }
 
 .formInput {
-    @apply m-3 mb-5 p-1 rounded-md w-[40vw];
+    @apply m-3 mb-5 p-1 rounded-md w-[45vw];
     outline: 2px solid var(--color-highlight);
     color: var(--color-highlight);
 }
