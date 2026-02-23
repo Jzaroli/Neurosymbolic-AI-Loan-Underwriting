@@ -1,13 +1,13 @@
 import express from 'express';
+import dotenv from 'dotenv';
 import { ApolloServer } from '@apollo/server';
 import { expressMiddleware } from '@apollo/server/express4';
 import { typeDefs, resolvers } from './schemas/index.js';
-import dotenv from 'dotenv';
-// import path from 'path';
-// import { fileURLToPath } from 'url'; 
 
-// const __filename = fileURLToPath(import.meta.url); 
-// const __dirname = path.dirname(__filename); 
+import { loadPDFs } from './rag/loadDocs.js';
+import { chunkText } from './rag/chunk.js';
+import { embedBatch, embedSingle } from './rag/embed.js';
+import { vectorStore } from './rag/vectorStore.js';
 
 dotenv.config();
 
@@ -22,14 +22,33 @@ const server = new ApolloServer({
 const startServer = async () => {
   await server.start()
   
-  // app.use(express.urlencoded({ extended: true }));
   app.use(express.json());
   
-  app.use(
-    '/graphql', 
-    expressMiddleware(server)
-  );  
+  // attach Apollo GraphQL middleware
+  app.use('/graphql', expressMiddleware(server));  
 
+  // build RAG vector store on boot
+  console.log("Loading PDFs...");
+  const docs = await loadPDFs();
+
+  const allChunks: string[] = [];
+  for (const doc of docs) {
+    allChunks.push(...chunkText(doc));
+  }
+
+  console.log('Embedding chunks...');
+  const embeddings = await embedBatch(allChunks);
+
+  embeddings.forEach((embedding, i) => {
+    vectorStore.push({
+      embedding,
+      content: allChunks[i],
+    });
+  });
+
+  console.log('Vector store ready:', vectorStore.length);
+
+  // start express server
   app.listen(PORT, () => {
     console.log(`API server running on port ${PORT}!`);
     console.log(`Use GraphQL at http://localhost:${PORT}/graphql`);
