@@ -1,4 +1,5 @@
 import getInference from '../utils/lrInference.js';
+import { retrieveTopK } from '../rag/retrieve.js';
 
 interface inferenceInputArgs {
   input: {
@@ -18,8 +19,7 @@ interface inferenceInputArgs {
 }
 
 interface inferenceResults {
-    score: number;
-    probability: number;
+    result: string;
 }
 
 const resolvers = {
@@ -103,15 +103,26 @@ const resolvers = {
         throw new Error ('Could not fetch inference results.');
       }
 
-      // set high risk condition based on ml inference probability results
-      let isHighRisk : boolean;
-      if (inference_results.probability[1] > 0.18) {
-        isHighRisk = true;
-      } else {
-        isHighRisk = false
-      };
+      //  risk score returned from model impacts workflow and RAG pipeline
+      const riskScore = inference_results.probability[1];
+      if (riskScore >= 0.18) {
+        console.log('high risk', riskScore)
 
-      return { score: inference_results.label, probability: inference_results.probability[1] }
+        const result = 'This applicant was calculated as high risk, cannot proceed with approvals and requires manual review'
+        
+        return { result }
+      } else if (riskScore > 0.09) {
+        console.log('medium risk', riskScore)
+
+        const result = 'This applicant was calculated as medium risk and requires manual review before approvals'
+        
+        return { result }
+      } else {
+        // console.log('low risk', riskScore)
+        const result = 'This applicant was calculated as low risk and can proceeed with final approvals'
+        
+        return { result }
+      }
     },
   }
 };
