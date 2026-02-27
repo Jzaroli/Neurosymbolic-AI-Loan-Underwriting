@@ -1,44 +1,54 @@
+import * as PdfParse from 'pdf-parse-new';
 import fs from 'fs';
 import path from 'path';
-// import pdf from 'pdf-parse';
-const pdf = require('pdf-parse');
+// Cast to callable function for TypeScript
 
-// pdf parsing and chart noise removal
+export async function parsePDF(filePath: string): Promise<string> {
+    const buffer = fs.readFileSync(path.resolve(filePath));
+    
+    const parser = new PdfParse.SmartPDFParser({
+        enableFastPath: true, // Optional: performance optimization
+    });
+
+    const result = await parser.parse(buffer);
+
+    console.log('Parsed pages:', result.numpages);
+    return result.text ?? '';
+}
+
+// still minimal but slightly more robust.
 function cleanText(text: string): string {
-  const lines = text.split("\n");
-
-  return lines
+  return text
+    .replace(/^\s*(?:\[\d+\]\s*)?.+?\.{5,}\s*\d+\s*$/gm, "") // remove TOC lines first
+    .split("\n")
     .map(l => l.trim())
     .filter(l => {
       if (!l) return false;
-
-      // Remove mostly numeric lines (charts / tables)
-      const digits = l.replace(/[^0-9]/g, '').length;
-      const digitRatio = digits / l.length;
-      if (digitRatio > 0.4) return false;
-
-      // Remove very short fragments
+      const digits = l.replace(/[^0-9]/g, "").length;
+      if (digits / l.length > 0.4) return false;
       if (l.length < 6) return false;
-
-      // Remove lines with too few words
       if (l.split(/\s+/).length < 3) return false;
-
       return true;
     })
     .join("\n");
 }
 
+// Load all PDFs from ./files
 export async function loadPDFs(): Promise<string[]> {
-  const dir = path.join(process.cwd(), 'files');
-  const files = fs.readdirSync(dir).filter(f => f.endsWith('.pdf'));
+    const dir = path.join(process.cwd(), 'files');
+    const files = fs.readdirSync(dir).filter((f) => f.endsWith('.pdf'));
 
   const docs: string[] = [];
-
   for (const file of files) {
-    const buffer = fs.readFileSync(path.join(dir, file));
-    const data = await pdf(buffer);
-    docs.push(cleanText(data.text));
+    try {
+      const text = await parsePDF(path.join(dir, file));
+      const cleanedText = cleanText(text)
+      docs.push(cleanedText);
+    } catch (err) {
+      console.error(`Failed to parse ${file}:`, err);
+    }
   }
-  console.log('Start of doc-ren', docs)
+
+  console.log(`Loaded ${docs.length} documents.`);
   return docs;
 }

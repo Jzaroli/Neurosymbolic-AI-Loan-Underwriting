@@ -32,7 +32,7 @@
 }
 
 .formInput {
-    @apply m-3 mb-5 p-1 rounded-md w-[45vw];
+    @apply m-3 mb-5 p-1 rounded-md w-[55vw] md:w-[30vw];
     outline: 2px solid var(--color-highlight);
     color: var(--color-highlight);
 }

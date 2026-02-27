@@ -10,7 +10,7 @@ const Home = () => {
     const [bankruptcyVerificationIsChecked, setBankruptcyVerificationIsChecked] = useState(false); // Handles boolean for bankruptcy and foreclosure verification
     const [intialError, setIntialError] = useState(false); // Handles early exit error condition
     const [intialErrorMessage, setInitialErrorMessage] = useState(''); // Handles early exit error message
-
+    const [ragResponse, setRagResponse] = useState('') // handles response from entire pipeline
     const [submitProfile, { error }] = useMutation(SUBMIT_PROFILE);
 
     // Handles input for all strings
@@ -62,7 +62,7 @@ const Home = () => {
         const creditScoreNum = Number(profileFormData.creditScore);
         const monthlyDebtsNum = Number(profileFormData.monthlyDebts);
         const monthlyIncomeNum = Number(profileFormData.monthlyIncome);
-        // const debtRatio = (monthlyDebtsNum / monthlyIncomeNum) * 100;
+        const debtRatio = (monthlyDebtsNum / monthlyIncomeNum) * 100;
         const delinquencies30Num = Number(profileFormData.delinquencies30);
         const delinquencies60Num = Number(profileFormData.delinquencies60);
         const delinquencies90Num = Number(profileFormData.delinquencies90);
@@ -82,10 +82,10 @@ const Home = () => {
             setIntialError(true);
             setInitialErrorMessage('Applicant credit score must be between 300 and 850.');
         } 
-        // else if (debtRatio > 43.00) {
-        //     setIntialError(true);
-        //     setInitialErrorMessage(`Applicant debt to income must be under 43%. Current Percentage: ${debtRatio.toFixed(2)}%`);
-        // } 
+        else if (debtRatio > 43.00) {
+            setIntialError(true);
+            setInitialErrorMessage(`Applicant debt to income must be under 43%. Current Percentage: ${debtRatio.toFixed(2)}%`);
+        } 
         else if (!profileFormData.hasIncomeVerification) {
             setIntialError(true);
             setInitialErrorMessage('Applicant must be able to provide proof of income.');
@@ -114,7 +114,7 @@ const Home = () => {
                 }
             }); 
 
-            console.log('return data', data);
+            setRagResponse(data.submitProfile.result)
         }
         catch (err) {
             console.error(err);
@@ -126,8 +126,8 @@ const Home = () => {
             <div className='home'>
                 <h1 className='h1'>Neurosymbolic AI System for Loan Underwriting</h1>
                 <div className='m-4 justify-start'>
-                    <p className='p'> <b>About: </b>Accurately vetting a loan candidate is a complex and risky process. Many factors play into approving a loan, opening the chance for errors in judgement with future defaulters. A hybrid AI model is the perfect architecture for mitigating loan default risks and providing much needed clarity to both parties. A machine learning model predicts the risk of default for an applicant. An added ontology and rule based layer approves or denies the applicant. A RAG pipeline adds domain intelligence. The final output is processed by an LLM, returning a concise summary of the candidate’s risk profile and application. This app combines all of these layers into an easy to use web application.</p>
-                    <p className='p'> <b>Note: </b>This app is for demo purposes. No personal information, documents or otherwise are requested and no information is stored.</p>
+                    <p className='p'> <b>About: </b>Vetting a loan candidate is risky process and many factors play into approving a loan, opening the chance for errors in judgement with future defaulters. A hybrid AI model is the perfect architecture for mitigating loan default risks and providing much needed clarity to both parties. <br></br>- A conditional layer approves or denies an applicant based on pass/no-pass rules. <br></br> - A machine learning model predicts the risk of default for an applicant. <br></br>- A RAG pipeline adds domain intelligence. <br></br>- The final output is processed by an LLM, returning a concise summary of the candidate’s risk profile and application.</p>
+                    <p className='p mt-3'> <b>Note: </b>This app is for demo purposes. No personal information, documents or otherwise are requested nor stored.</p>
                     <p className='max-w-full border-b-2 min-h-[20px]'></p>
                     <h2 className='font-bold underline mt-10 text-lg'>Applicant Form:</h2>
                     <form className='form' noValidate onSubmit={handleFormSubmit}>
@@ -279,6 +279,9 @@ const Home = () => {
                             <div className='error'>
                                 {error.message}
                             </div>
+                            )}
+                            {ragResponse && (
+                                <p className='m-1 mt-2'><b>Results: </b>{ragResponse}</p>
                             )}
                         </div>
                     </form>

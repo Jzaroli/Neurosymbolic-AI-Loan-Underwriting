@@ -4,9 +4,11 @@ Author: Johann Zaroli
 
 ## Overview:  
   
-Accurately vetting a loan candidate is a complex and risky process. Many factors play into approving a loan, opening the chance for errors in judgement. For lenders, the risk includes lost revenue, which can put even large financial institutions at risk of failure. For borrowers, debt can become burdensome or in the worst case, crippling, impacting quality of life and long term financial health. Equipping both parties with more transparency during the loan approval process can lead to a better mutual understanding, added trust, and mitigate long term, unforeseen risks to both parties.  
-  
-A hybrid AI model is the perfect architecture for mitigating loan default risks and providing much needed clarity to both parties. A machine learning model predicts the probability of default for an applicant. An added ontology and rule based layer approves or denies the applicant. A RAG pipeline adds domain intelligence. The final output is processed by an LLM, returning a concise summary of the candidate’s risk profile and application. This app combines all of these layers in an easy to use web application for usability.   
+Vetting a loan candidate is risky process and many factors play into approving a loan, opening the chance for errors in judgement with future defaulters. A hybrid AI model is the perfect architecture for mitigating loan default risks and providing much needed clarity to both parties.  
+- A conditional layer approves or denies an applicant based on pass/no-pass rules.
+- A machine learning model predicts the risk of default for an applicant.
+- A RAG pipeline adds domain intelligence.
+- The final output is processed by an LLM, returning a concise summary of the candidate’s risk profile and application.   
   
 ## Proposed Solution:  
   

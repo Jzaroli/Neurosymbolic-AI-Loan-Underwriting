@@ -19,6 +19,10 @@ type InferenceResponse {
   result: String!
 }
 
+type RagAnswer {
+  answer: String!
+}
+
 type Query {
   _health: String
 }

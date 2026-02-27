@@ -1,4 +1,5 @@
 import getInference from '../utils/lrInference.js';
+import askRag from '../utils/askRag.js';
 const resolvers = {
     Query: {
         _health: () => 'ok',
@@ -61,12 +62,63 @@ const resolvers = {
                 monthlyIncome: input.monthlyIncome,
                 numberOfOpenCreditLinesAndLoans: input.openedLines,
             };
+            // total delinquencies used in rag pipeline below
+            const totalDelinqencies = input.delinquencies30 + input.delinquencies60 + input.delinquencies90;
+            // sends inputs out for inference, returning probability and model score.
             const inference_results = await getInference(inference_payload);
-            console.log('inference results:', inference_results);
             if (!inference_results) {
                 throw new Error('Could not fetch inference results.');
             }
-            return { score: inference_results.label, probability: inference_results.probability[1] };
+            //  risk score returned from model impacts workflow and RAG pipeline
+            const riskScore = inference_results.probability[1];
+            // high risk:
+            if (riskScore > 0.18) {
+                // console.log('high risk', riskScore)
+                const ragResult = await askRag(`This user is at high risk for defaulting on their loan. 
+          Their age: ${input.age}, 
+          credit score: ${input.creditScore},
+          monthly total income: ${input.monthlyIncome},
+          monthly total debts: ${input.monthlyDebts},
+          debt ratio: ${debtRatio_calc},
+          total delinquencies: ${totalDelinqencies},
+          revolving utilization of unsecured lines: ${revolving_calc},
+          number of open credit lines and loans: ${input.openedLines}
+          `);
+                const result = `This candidate was calculated as high risk, cannot proceed with approvals and requires manual review. ${ragResult}`;
+                return { result };
+                // medium risk:
+            }
+            else if (riskScore > 0.12) {
+                // console.log('medium risk', riskScore)
+                const ragResult = await askRag(`This user is at medium risk for defaulting on their loan. 
+          Their age: ${input.age}, 
+          credit score: ${input.creditScore},
+          monthly total income: ${input.monthlyIncome},
+          monthly total debts: ${input.monthlyDebts},
+          debt ratio: ${debtRatio_calc},
+          total delinquencies: ${totalDelinqencies},
+          revolving utilization of unsecured lines: ${revolving_calc},
+          number of open credit lines and loans: ${input.openedLines}
+          `);
+                const result = `This candidate was calculated as medium risk and requires manual review before approvals. ${ragResult}`;
+                return { result };
+                // low risk:
+            }
+            else {
+                // console.log('low risk', riskScore)
+                const ragResult = await askRag(`This user is at low risk for defaulting on their loan. 
+          Their age: ${input.age}, 
+          credit score: ${input.creditScore},
+          monthly total income: ${input.monthlyIncome},
+          monthly total debts: ${input.monthlyDebts},
+          debt ratio: ${debtRatio_calc},
+          total delinquencies: ${totalDelinqencies},
+          revolving utilization of unsecured lines: ${revolving_calc},
+          number of open credit lines and loans: ${input.openedLines}
+          `);
+                const result = `This candidate was calculated as low risk and can proceeed with final approvals. ${ragResult}`;
+                return { result };
+            }
         },
     }
 };

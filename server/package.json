@@ -21,7 +21,7 @@
     "express": "^4.21.2",
     "graphql": "^16.10.0",
     "openai": "^6.22.0",
-    "pdf-parse": "^2.4.5",
+    "pdf-parse-new": "^2.0.0",
     "tiktoken": "^1.0.22"
   },
   "devDependencies": {

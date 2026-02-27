@@ -16,8 +16,11 @@ input InferenceInput {
 }
 
 type InferenceResponse {
-  score: Int!
-  probability: Float!
+  result: String!
+}
+
+type RagAnswer {
+  answer: String!
 }
 
 type Query {
