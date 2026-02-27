@@ -6,7 +6,7 @@ import { typeDefs, resolvers } from './schemas/index.js';
 
 import { loadPDFs } from './rag/loadDocs.js';
 import { chunkText } from './rag/chunk.js';
-import { embedBatch, embedSingle } from './rag/embed.js';
+import { embedBatch } from './rag/embed.js';
 import { vectorStore } from './rag/vectorStore.js';
 
 dotenv.config();
@@ -28,7 +28,7 @@ const startServer = async () => {
   app.use('/graphql', expressMiddleware(server));  
 
   // build RAG vector store on boot
-  console.log("Loading PDFs...");
+  console.log('Loading PDFs...');
   const docs = await loadPDFs();
 
   const allChunks: string[] = [];
