@@ -5,7 +5,7 @@ Author: Johann Zaroli
 ## Overview:  
   
 Vetting a loan candidate is risky process and many factors play into approving a loan, opening the chance for errors in judgement with future defaulters. A hybrid AI model is the perfect architecture for mitigating loan default risks and providing much needed clarity to both parties.  
-- A conditional layer approves or denies an applicant based on pass/no-pass rules.
+- A conditional layer approves or denies an applicant based on pass/fail rules.
 - A machine learning model predicts the risk of default for an applicant.
 - A RAG pipeline adds domain intelligence.
 - The final output is processed by an LLM, returning a concise summary of the candidate’s risk profile and application.   

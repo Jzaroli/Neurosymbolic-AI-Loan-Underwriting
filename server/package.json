@@ -19,6 +19,7 @@
     "axios": "^1.13.2",
     "cors": "^2.8.5",
     "express": "^4.21.2",
+    "express-rate-limit": "^8.2.1",
     "graphql": "^16.10.0",
     "openai": "^6.22.0",
     "pdf-parse-new": "^2.0.0",
