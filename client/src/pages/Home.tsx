@@ -43,19 +43,20 @@ const Home = () => {
             setTimeout(() => {
                 setIntialError(false);
                 setInitialErrorMessage('');
-            }, 5000);
+            }, 6000);
         }
     }, [intialError]);
 
     const handleFormSubmit = async (event: FormEvent<HTMLFormElement>) => {
-        // console.log('this is the data', profileFormData);
-
         event.preventDefault();
         const form = event.currentTarget;
         if (!(form.age && form.creditScore && form.monthlyIncome && form.monthlyDebts && form.delinquencies30 && form.delinquencies60 && form.delinquencies90 && form.openedLines && form.unsecuredUsage && form.unsecuredLimit)) {
             event.preventDefault();
             event.stopPropagation();
         }
+
+        // Clears results
+        setRagResponse('')
 
         // Converts all string to numbers
         const ageNum = Number(profileFormData.age);
@@ -74,24 +75,30 @@ const Home = () => {
         if (ageNum < 18 || ageNum > 120) {
             setIntialError(true);
             setInitialErrorMessage('Applicant must be between the ages of 18 and 120.');
+            return
         }
         else if (creditScoreNum <= 620 && creditScoreNum >= 300) {
             setIntialError(true);
             setInitialErrorMessage('Applicant credit score must be above 620.');
+            return
         } else if (creditScoreNum < 300 || creditScoreNum > 850) {
             setIntialError(true);
             setInitialErrorMessage('Applicant credit score must be between 300 and 850.');
+            return
         } 
         else if (debtRatio > 43.00) {
             setIntialError(true);
             setInitialErrorMessage(`Applicant debt to income must be under 43%. Current Percentage: ${debtRatio.toFixed(2)}%`);
+            return
         } 
         else if (!profileFormData.hasIncomeVerification) {
             setIntialError(true);
             setInitialErrorMessage('Applicant must be able to provide proof of income.');
+            return
         } else if (profileFormData.hasBankruptcy) {
             setIntialError(true);
             setInitialErrorMessage('Applicant must not have any active bankruptcies or foreclosures.');
+            return
         }
 
         try {
@@ -126,7 +133,7 @@ const Home = () => {
             <div className='home'>
                 <h1 className='h1'>Neurosymbolic AI System for Loan Underwriting</h1>
                 <div className='m-4 justify-start'>
-                    <p className='p'> <b>About: </b>Vetting a loan candidate is risky process and many factors play into approving a loan, opening the chance for errors in judgement with future defaulters. A hybrid AI model is the perfect architecture for mitigating loan default risks and providing much needed clarity to both parties. <br></br>- A conditional layer approves or denies an applicant based on pass/no-pass rules. <br></br> - A machine learning model predicts the risk of default for an applicant. <br></br>- A RAG pipeline adds domain intelligence. <br></br>- The final output is processed by an LLM, returning a concise summary of the candidate’s risk profile and application.</p>
+                    <p className='p'> <b>About: </b>Vetting a loan candidate is risky process and many factors play into approving a loan, opening the chance for errors in judgement with future defaulters. A hybrid AI model is the perfect architecture for mitigating loan default risks and providing much needed clarity to both parties. <br></br>- A conditional layer approves or denies an applicant based on pass/fail rules. <br></br> - A machine learning model predicts the risk of default for an applicant. <br></br>- A RAG pipeline adds domain intelligence. <br></br>- The final output is processed by an LLM, returning a concise summary of the candidate’s risk profile and application.</p>
                     <p className='p mt-3'> <b>Note: </b>This app is for demo purposes. No personal information, documents or otherwise are requested nor stored.</p>
                     <p className='max-w-full border-b-2 min-h-[20px]'></p>
                     <h2 className='font-bold underline mt-10 text-lg'>Applicant Form:</h2>
@@ -277,7 +284,10 @@ const Home = () => {
                             )}
                             {error && (
                             <div className='error'>
-                                {error.message}
+                                {(error.networkError as any)?.statusCode  === 429
+                                    ? "You exceeded the limit of 6 candidate profiles per hour."
+                                    : error.message
+                                }
                             </div>
                             )}
                             {ragResponse && (
