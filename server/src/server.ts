@@ -64,11 +64,10 @@ const startServer = async () => {
   console.log('Vector store ready:', vectorStore.length);
 
   // serve static files
-  app.use(express.static(path.join(process.cwd(), 'client/dist')));
-  
-  // catch-all route to serve index.html for any non-API route
+  app.use(express.static(path.join(process.cwd(), '../client/dist')));
+
   app.get('*', (req, res) => {
-    res.sendFile(path.join(process.cwd(), 'client/dist', 'index.html'));
+    res.sendFile(path.join(process.cwd(), '../client/dist', 'index.html'));
   });
   
   // start express server
