@@ -133,8 +133,8 @@ const Home = () => {
             <div className='home'>
                 <h1 className='h1'>Neurosymbolic AI System for Loan Underwriting</h1>
                 <div className='m-4 justify-start'>
-                    <p className='p'> <b>About: </b>Vetting a loan candidate is risky process and many factors play into approving a loan, opening the chance for errors in judgement with future defaulters. A hybrid AI model is the perfect architecture for mitigating loan default risks and providing much needed clarity to both parties. <br></br>- A conditional layer approves or denies an applicant based on pass/fail rules. <br></br> - A machine learning model predicts the risk of default for an applicant. <br></br>- A RAG pipeline adds domain intelligence. <br></br>- The final output is processed by an LLM, returning a concise summary of the candidate’s risk profile and application.</p>
-                    <p className='p mt-3'> <b>Note: </b>This app is for demo purposes. No personal information, documents or otherwise are requested nor stored.</p>
+                    <p className='p'> <b>About: </b>Vetting a loan candidate is a risky process. Many factors play into approving a loan, opening the chance for errors in judgement with future defaulters. A hybrid AI model is the perfect architecture for mitigating loan default risks and providing much needed clarity to both parties: <br></br>- A conditional layer approves or denies an applicant based on pass/fail rules. <br></br> - A machine learning model predicts the risk of default for an applicant. <br></br>- A RAG pipeline adds domain intelligence. <br></br>- The final output is processed by an LLM, returning a concise summary of the applicant’s risk profile.</p>
+                    <p className='p mt-3'> <b>Note: </b>This app is for demo purposes. Personal information is neither requested nor stored.</p>
                     <p className='max-w-full border-b-2 min-h-[20px]'></p>
                     <h2 className='font-bold underline mt-10 text-lg'>Applicant Form:</h2>
                     <form className='form' noValidate onSubmit={handleFormSubmit}>
