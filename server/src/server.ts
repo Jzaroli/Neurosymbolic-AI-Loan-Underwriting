@@ -1,5 +1,6 @@
 import express from 'express';
 import dotenv from 'dotenv';
+import path from 'path';
 import { ApolloServer } from '@apollo/server';
 import { expressMiddleware } from '@apollo/server/express4';
 import { typeDefs, resolvers } from './schemas/index.js';
@@ -60,9 +61,16 @@ const startServer = async () => {
       content: allChunks[i],
     });
   });
-
   console.log('Vector store ready:', vectorStore.length);
 
+  // serve static files
+  app.use(express.static(path.join(process.cwd(), 'client/dist')));
+  
+  // catch-all route to serve index.html for any non-API route
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(process.cwd(), 'client/dist', 'index.html'));
+  });
+  
   // start express server
   app.listen(PORT, () => {
     console.log(`API server running on port ${PORT}!`);
