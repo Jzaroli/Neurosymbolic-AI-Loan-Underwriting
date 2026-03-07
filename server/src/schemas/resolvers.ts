@@ -20,6 +20,7 @@ interface inferenceInputArgs {
 
 interface inferenceResults {
     result: string;
+    score: number
 }
 
 const resolvers = {
@@ -128,7 +129,7 @@ const resolvers = {
 
         const result = `This candidate was calculated as high risk, cannot proceed with approvals and requires manual review. ${ragResult}`
         
-        return { result }
+        return { result: result, score: riskScore  }
       // medium risk:
       } else if (riskScore > 0.12) {
         // console.log('medium risk', riskScore)
@@ -148,7 +149,7 @@ const resolvers = {
 
         const result = `This candidate was calculated as medium risk and requires manual review before approvals. ${ragResult}`
         
-        return { result }
+        return { result: result, score: riskScore }
       // low risk:
       } else {
         // console.log('low risk', riskScore)
@@ -167,7 +168,7 @@ const resolvers = {
 
         const result = `This candidate was calculated as low risk and can proceeed with final approvals. ${ragResult}`
         
-        return { result }
+        return { result: result, score: riskScore }
       }
     },
   }

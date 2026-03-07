@@ -10,6 +10,7 @@ const Home = () => {
     const [bankruptcyVerificationIsChecked, setBankruptcyVerificationIsChecked] = useState(false); // Handles boolean for bankruptcy and foreclosure verification
     const [intialError, setIntialError] = useState(false); // Handles early exit error condition
     const [intialErrorMessage, setInitialErrorMessage] = useState(''); // Handles early exit error message
+    const [riskResponse, setRiskResponse] = useState('') // handles response from entire pipeline
     const [ragResponse, setRagResponse] = useState('') // handles response from entire pipeline
     const [submitProfile, { error }] = useMutation(SUBMIT_PROFILE);
 
@@ -57,6 +58,7 @@ const Home = () => {
 
         // Clears results
         setRagResponse('')
+        setRiskResponse('')
 
         // Converts all string to numbers
         const ageNum = Number(profileFormData.age);
@@ -121,6 +123,7 @@ const Home = () => {
                 }
             }); 
 
+            setRiskResponse(data.submitProfile.score.toFixed(2))
             setRagResponse(data.submitProfile.result)
         }
         catch (err) {
@@ -290,8 +293,11 @@ const Home = () => {
                                 }
                             </div>
                             )}
+                            {riskResponse && (
+                                <p className='m-1 mt-2 mb-2'><b>Score: </b>{riskResponse}</p>
+                            )}
                             {ragResponse && (
-                                <p className='m-1 mt-2'><b>Results: </b>{ragResponse}</p>
+                                <p className='m-1 mt-2'><b>Summary: </b>{ragResponse}</p>
                             )}
                         </div>
                     </form>
