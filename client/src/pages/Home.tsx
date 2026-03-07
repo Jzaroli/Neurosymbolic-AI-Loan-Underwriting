@@ -294,7 +294,7 @@ const Home = () => {
                             </div>
                             )}
                             {riskResponse && (
-                                <p className='m-1 mt-2 mb-2'><b>Score: </b>{riskResponse}</p>
+                                <p className='m-1 mt-2 mb-2'><b>Risk Score: </b>{riskResponse}</p>
                             )}
                             {ragResponse && (
                                 <p className='m-1 mt-2'><b>Summary: </b>{ragResponse}</p>
