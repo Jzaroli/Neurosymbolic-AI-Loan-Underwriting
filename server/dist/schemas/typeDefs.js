@@ -33,5 +33,4 @@ type Mutation {
 }
 
 `;
-
 export default typeDefs;

@@ -4,6 +4,7 @@ export const SUBMIT_PROFILE = gql`
   mutation submitProfile($input: InferenceInput!) {
     submitProfile(input: $input) {
       result
+      score
     }  
   } 
 `;
