@@ -17,7 +17,10 @@ const Home = () => {
     // Handles input for all strings
     const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.target;
-        setCompanyFormData({ ...profileFormData, [name]: value });
+        setCompanyFormData({ 
+            ...profileFormData, 
+            [name]: value.replace(/[^a-zA-Z0-9]/g, ''),
+            });
     };
 
     // Set income verification status in form data before form submit
